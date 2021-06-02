@@ -27,14 +27,18 @@
             if(resp.data){
                 let centers=resp.data.centers;
                 if(centers.length<1){
-                    res.send("No vaccination centers available right now in this pincode")
+                    res.send("No vaccination centers are available right now in this pincode")
+                }
+                else{
+                    res.send(" vaccination centers are available right now in this pincode")
+
                 }
 
             }
 
             
         })
-        .catch((error)=>console.log(error));
+        .catch((error)=>res.send("Something sent wrong"));
    
     })
        
