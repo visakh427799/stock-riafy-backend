@@ -23,7 +23,17 @@
 
 
         await axios.get('https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=686653&date=02-06-2021',{headers})
-        .then((res)=>{console.log(res.data)})
+        .then((resp)=>{console.log(resp.data)
+            if(resp.data){
+                let centers=resp.data.centers;
+                if(centers.length<1){
+                    res.send("No vaccination centers available right now in this pincode")
+                }
+
+            }
+
+            
+        })
         .catch((error)=>console.log(error));
    
     })
