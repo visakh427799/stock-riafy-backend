@@ -1,50 +1,17 @@
- const express = require('express');
- const router = express.Router();
- const axios  = require('axios');
- const cron = require('node-cron')
+const express = require("express");
+const router = express.Router();
+let user = require("./models/usermodel");
 
- router.get('/',(req,res)=>{
+router.post("/search", async (req, res) => {
+  console.log(req.body.inp);
 
+  let data = await user.find({ Name: { $regex: req.body.inp, $options: "i" } });
+  if (data) {
+    res.json({ user: data });
+  }
+  else{
+    res.json({ user: [] });
+  }
+});
 
-    let headers={
-        authority: "cdn-api.co-vin.in",
-        method: 'GET',
-        path: "/api/v2/appointment/sessions/public/calendarByPin?pincode=686653&date=02-06-2021",
-        scheme: 'https',
-        origin: "https://cowin-mern-app.herokuapp.com",
-        referer: "https://cowin-mern-app.herokuapp.com/",
-       
-        
-        }
-
-
-    cron.schedule("*/10 * * * * *", async function() {
-
-
-
-        await axios.get('https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=686653&date=02-06-2021',{headers})
-        .then((resp)=>{console.log(resp.data)
-            if(resp.data){
-                let centers=resp.data.centers;
-                if(centers.length<1){
-                    res.send("No vaccination centers are available right now in this pincode")
-                }
-                else{
-                    res.send(" vaccination centers are available right now in this pincode")
-
-                }
-
-            }
-
-            
-        })
-        .catch((error)=>res.send("Something sent wrong"));
-   
-    })
-       
-    });
-
-    
-        
-
- module.exports=router;
+module.exports = router;
